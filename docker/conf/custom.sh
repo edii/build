@@ -12,9 +12,9 @@ chown docker-data.docker-data /var/www/vendor -Rf
 yum install -y postgresql-client
 
 ### --bower
-#sudo npm install bower -g
+sudo npm install bower -g
 ### --gulp
-#sudo npm install gulp -g
+sudo npm install gulp -g
 ### --webpack
 #sudo npm install webpack -g
 ### --webpack-dev-server

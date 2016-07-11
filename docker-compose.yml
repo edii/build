@@ -1,0 +1,105 @@
+version: '2'
+services:
+  web:
+    build:
+      context: ./docker/vendor/docker/src/
+      dockerfile: Dockerfile.yml
+      args:
+        - php=56 # (54|55|56|70)
+        - UID=1086800073
+        - GID=1086800073
+        - NODE=4.4.3 # (0.10.44|0.12.13|0.12|0.10|4.4.3|4.4|4|5.10.1|5.10|5|latest)
+    restart: always
+    privileged: false
+    stdin_open: true
+    tty: true
+    container_name: build_web
+    ports:
+      - "127.1.1.1:80:80"
+      - "127.1.1.1:443:443"
+      - "127.1.1.1:9000:9000"
+      - "2224:22"
+      - "127.1.1.1:3306:13306"
+    links:
+      - build_db:mysql
+    volumes:
+      # system
+      - ./:/var/www:rw
+#      - ./postgres:/var/www/postgres:ro
+      - ./tmp:/var/www/tmp:rw
+      - ./docker/conf/php.ini:/etc/php.ini:rw
+      - ./docker/conf/custom.sh:/scripts/custom.sh:rw
+      - ./docker/conf/docker.conf:/etc/nginx/conf.d/docker.conf:rw
+      - ./docker/conf/.ssh:/root/.ssh:rw
+      # symfony
+      - ./vendor:/var/www/vendor:rw
+    extra_hosts:
+      - "build.dev:127.1.1.1"
+    depends_on:
+      - build_db
+    dns:
+      - 8.8.8.8
+    environment:
+      - COMPOSE_PROJECT_NAME=build
+      - DEBUG=true
+      - RACK_ENV=development
+      - SHOW=true
+      - SESSION_SECRET
+
+#  # phpmyadmin
+#  phppgadmin:
+#    image: maxexcloo/phppgadmin
+#    container_name: rest_phppgadmin
+#    links:
+#      - postgres:postgresql
+#    ports:
+#      - "8083:80"
+#    expose:
+#      - "8083"
+#
+#  # postgres
+#  postgres:
+#    restart: always
+#    image: postgres:latest
+#    container_name: rest_postgres
+#    volumes:
+#      - ./postgres/pdata:/pdata
+#      - ./postgres/log:/var/log/postgresql
+#    environment:
+#      LC_ALL: C.UTF-8
+#      POSTGRES_USER: docker-data
+#      POSTGRES_PASSWORD: root
+#      PGDATA: "/pdata"
+
+  # phpmyadmin
+  build_myadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: build_myadmin
+    restart: always
+    links:
+      - build_db:mysql
+    ports:
+      - "8084:80"
+      - "3308:13306"
+    expose:
+      - "8084"
+#    depends_on:
+#      - lyrebird_db
+    environment:
+      - PMA_ARBITRARY=1
+#      - PMA_PORT=3307
+#      - PMA_HOST=mysql
+
+  # mysqls
+  build_db:
+    image: mysql:latest
+    container_name: build_mysql
+    ports:
+      - "13306:3306"
+    expose:
+      - "13306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql:rw
+      - ./mysql/log/mysql.log:/var/log/mysqld.log
+    environment:
+      MYSQL_ROOT_PASSWORD: root
