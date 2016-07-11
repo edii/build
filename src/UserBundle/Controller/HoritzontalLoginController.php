@@ -1,6 +1,6 @@
 <?php
 
-namespace Trascastro\UserBundle\Controller;
+namespace UserBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

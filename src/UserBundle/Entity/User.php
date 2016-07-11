@@ -1,16 +1,6 @@
 <?php
-/**
- * (c) Ismael Trascastro <i.trascastro@gmail.com>
- *
- * @link        http://www.ismaeltrascastro.com
- * @copyright   Copyright (c) Ismael Trascastro. (http://www.ismaeltrascastro.com)
- * @license     MIT License - http://en.wikipedia.org/wiki/MIT_License
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Trascastro\UserBundle\Entity;
+namespace UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -18,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="app_user")
- * @ORM\Entity(repositoryClass="Trascastro\UserBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class User extends BaseUser

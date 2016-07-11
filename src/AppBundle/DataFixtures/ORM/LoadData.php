@@ -1,24 +1,12 @@
 <?php
-/**
- * (c) Ismael Trascastro <i.trascastro@gmail.com>
- *
- * @link        http://www.ismaeltrascastro.com
- * @copyright   Copyright (c) Ismael Trascastro. (http://www.ismaeltrascastro.com)
- * @license     MIT License - http://en.wikipedia.org/wiki/MIT_License
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace AppBundle\DataFixtures\ORM;
-
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Tag;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Trascastro\UserBundle\Entity\User;
+use UserBundle\Entity\User;
 
 class LoadData implements FixtureInterface
 {
