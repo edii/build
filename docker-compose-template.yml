@@ -13,15 +13,15 @@ services:
     privileged: false
     stdin_open: true
     tty: true
-    container_name: lyrebird_web
+    container_name: build_web
     ports:
-      - "127.0.0.20:80:80"
-      - "127.0.0.20:443:443"
-      - "127.0.0.20:9000:9000"
+      - "127.1.1.1:80:80"
+      - "127.1.1.1:443:443"
+      - "127.1.1.1:9000:9000"
       - "2224:22"
-      - "127.0.0.20:3306:13306"
+      - "127.1.1.1:3306:13306"
     links:
-      - lyrebird_db:mysql
+      - build_db:mysql
     volumes:
       # system
       - ./:/var/www:rw
@@ -34,16 +34,13 @@ services:
       # symfony
       - ./vendor:/var/www/vendor:rw
     extra_hosts:
-      - "rest.dev:127.0.0.20"
-      - "int.office.local:192.168.11.183"
-      - "stash.office.dev:192.168.223.32"
+      - "build.dev:127.1.1.1"
     depends_on:
-      - lyrebird_db
+      - build_db
     dns:
       - 8.8.8.8
-      - 192.168.70.217
     environment:
-      - COMPOSE_PROJECT_NAME=rest
+      - COMPOSE_PROJECT_NAME=build
       - DEBUG=true
       - RACK_ENV=development
       - SHOW=true
@@ -75,12 +72,12 @@ services:
 #      PGDATA: "/pdata"
 
   # phpmyadmin
-  resy_myadmin:
+  build_myadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: lyrebird_myadmin
+    container_name: build_myadmin
     restart: always
     links:
-      - lyrebird_db:mysql
+      - build_db:mysql
     ports:
       - "8084:80"
       - "3308:13306"
@@ -94,9 +91,9 @@ services:
 #      - PMA_HOST=mysql
 
   # mysqls
-  lyrebird_db:
+  build_db:
     image: mysql:latest
-    container_name: lyrebird_mysql
+    container_name: build_mysql
     ports:
       - "13306:3306"
     expose:
