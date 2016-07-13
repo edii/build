@@ -1,0 +1,7 @@
+main:
+    path: /{_params}
+    defaults:
+        _controller: AppBundle:Backend:index
+        _params: ~
+    requirements:
+        _params: .*
