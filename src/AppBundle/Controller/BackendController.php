@@ -21,9 +21,7 @@ class BackendController extends Controller
      */
     public function indexAction()
     {
-        die(var_dump('BACKEND'));
-
-        return $this->render(':index:index.html.twig');
+        return $this->render(':admin:index.html.twig');
     }
 
 }
