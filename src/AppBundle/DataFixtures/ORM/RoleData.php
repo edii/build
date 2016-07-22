@@ -5,8 +5,12 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Role;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 
-class LoadData implements FixtureInterface
+/**
+ * @package AppBundle\DataFixtures\ORM
+ */
+class RoleData extends AbstractFixture
 {
     public function load(ObjectManager $m)
     {
@@ -16,22 +20,16 @@ class LoadData implements FixtureInterface
         $role->setRole('ROLE_ADMIN');
         $m->persist($role);
 
+        $this->addReference('ROLE_ADMIN', $role);
+
         $role2 = new Role();
         $role2->setDescription('ROLE_USER');
         $role2->setName('ROLE_USER');
         $role2->setRole('ROLE_USER');
         $m->persist($role2);
 
-        $m->flush();
+        $this->addReference('ROLE_USER', $role2);
 
-        $user = new User();
-        $user
-            ->addRole($role)
-            ->setUsername('admin')
-            ->setPassword('123')
-            ->setEmail('admin@test.com');
-
-        $m->persist($user);
         $m->flush();
     }
 

@@ -1,0 +1,5 @@
+#services:
+#    app.user.data.fixture:
+#        class: AppBundle\DataFixtures\ORM\UserData
+#        calls:
+#          - [ setContainer, [ "@service_container" ] ]
