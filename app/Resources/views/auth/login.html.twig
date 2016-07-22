@@ -1,0 +1,66 @@
+{% embed 'base.html.twig' with {'title' : "Se connecter", 'isFullscreen' : '1', 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <form action="{{ path('login') }}" method="post">
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}"
+                        >
+                        <input type="hidden" name="_target_path" value="{{ path('my_profile') }}" />
+                        <div class="group">
+                            <input name="_username" type="text" required value="{{ last_username|default('') }}">
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="material">Nom d'utilisateur</label>
+                        </div>
+                        <div class="group">
+                            <input name="_password" type="password" required>
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="material">Mot de passe</label>
+                        </div>
+                        <div class="buttons">
+                            <button type="submit" class="btn btn-success btn-medium"><i class="fa fa-check">&nbsp;&nbsp;</i>Se connecter</button>
+                        </div>
+                        
+                    </form>
+                    
+                </div>
+
+
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+{% endembed %}

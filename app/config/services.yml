@@ -1,5 +1,24 @@
 services:
-    twig.extension.date:
-        class: Twig_Extensions_Extension_Date
+    app.twig.extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
         tags:
             - { name: twig.extension }
+    twig.extension.pcr:
+        class: Jasny\Twig\PcreExtension
+        tags:
+            - { name: twig.extension }
+    twig.extension.date:
+        class: Jasny\Twig\DateExtension
+        tags:
+            - { name: twig.extension }
+    twig.extensions.text:
+        class: Jasny\Twig\TextExtension
+        tags:
+            - { name: twig.extension }
+
+#services:
+#    twig.extension.date:
+#        class: Twig_Extensions_Extension_Date
+#        tags:
+#            - { name: twig.extension }

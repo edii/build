@@ -1,0 +1,18 @@
+<nav>
+    <ul class="{{ classNames }}">
+        {% for page in pages %}
+            <li><a href="{{ path('page', {'slug' : page.slug}) }}">{{ page.name }}</a></li>
+        {% endfor %}
+        <li><a href="{{ path('blog_index') }}">Blog</a></li>
+        <li><a href="{{ path('portfolio_index') }}">Portfolio</a></li>
+        {%  if not app.user %}
+            <li><a href="{{ path('login') }}">Se connecter</a></li>
+            <li><a href="{{ path('register') }}">S'inscrire</a></li>
+        {% endif %}
+        {% if app.user %}
+            <li><a href="{{ path('my_profile') }}">Chez {{ app.user.username }}</a></li>
+            {% if is_granted('ROLE_ADMIN') %} <li><a href="{{ path('admin_index') }}">Administration</a></li> {% endif %}
+            <li><a href="{{ path('logout') }}">Se déconnecter</a></li>
+        {% endif %}
+    </ul>
+</nav>

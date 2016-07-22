@@ -1,0 +1,72 @@
+{% embed 'base.html.twig' with {'title': 'Utilisateurs', 'subtitle': "Liste des utilisateurs", 'isFullscreen': '1', 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <p>Liste des utilisateurs inscrits</p>
+                    
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Pseudo</th>
+                            <th>E-mail</th>
+                            <th>Nb. articles</th>
+                            <th>Date d'inscription</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for user in users %}
+                            <tr {% if app.user.username == user.username %} class="connected-user   " {% endif %}>
+                                <td style="width: 48%; "><a href="{% if app.user.username == user.username %} {{ path('my_profile') }} {% else %} {{ path('profile', {"username" : user.username}) }} {% endif %}">{{ user.username }}</a></td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.posts|length }}</td>
+                                <td style="width:17%;">{{ user.createdAt|date('d/m/Y') }} <span class="hour">{{ user.createdAt|date('H:i') }}</span></td>
+                                <td style="width: 45%;" class="actions"><a class ="btn btn-info" href="{{ path('edit_profile', {"username": user.username}) }}"><i class="fa fa-edit">&nbsp;&nbsp;</i>Éditer</a>{% if app.user.username != user.username %}<a class="btn btn-danger" href="{{ path('delete_profile', {"username": user.username}) }}"><i class="fa fa-times">&nbsp;&nbsp;</i>Supprimer</a>{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+
+{% endembed %}

@@ -1,0 +1,69 @@
+{% embed 'base.html.twig' with {'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p>{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <h3>Informations basiques</h3>
+                    <p>Nom d'utilisateur : {{ user.username }}</p>
+                    <p>E-mail : {{ user.email }}</p>
+                    <h3>Rôles utilisateur</h3>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Rôle</th>
+                            <th>Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for role in user.rolesObject %}
+                            <tr>
+                                <td>
+                                    {{ role.name }}
+                                </td>
+                                <td class="third">
+                                    <span class="role-description">{{ role.description }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+{% endembed %}

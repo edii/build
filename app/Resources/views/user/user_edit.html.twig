@@ -1,0 +1,82 @@
+{% embed 'base.html.twig' with {'title': 'Éditer l\'utilisateur', 'subtitle': user.username, 'isFullscreen': '1', 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <h3>Rôles de l'utilisateur</h3>
+                    <form action="{{ path('edit_profile', {"username" : user.username}) }}" method="post">
+
+                        <table>
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Rôle</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for role in availableRoles %}
+                                <tr>
+                                    <td>
+                                        <div class="squaredThree">
+                                            <input id="role{{ loop.index }}" name="roles[]" type="checkbox" value="{{ role.id }}" {% if user.granted(role.role) %} checked="checked" {% endif %}">
+                                            <label for="role{{ loop.index }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label for="role{{ loop.index }}">{% if role.name == "L'admashallah" %}<span class="admashallah">{{ role.name }}</span> {% else %} {{ role.name }} {% endif %}</label>
+                                    </td>
+                                    <td>
+                                        <span class="role-description">{{ role.description }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <hr>
+                        <div class="buttons">
+                            <button class="btn btn-success btn-medium align-right" type="submit">Valider</button>
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+
+{% endembed %}

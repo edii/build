@@ -1,0 +1,66 @@
+{% embed 'base.html.twig' with {'title' : "S'inscrire", "isFullscreen" : '1', 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+
+        <div class="container fullscreen">
+
+            <div class="generic-card fullscreen">
+                <header>
+                    <h2>{{ title }}</h2>
+                </header>
+                <div class="content fullscreen">
+                    {% if error|default(null) != null %} <div class="alert alert-danger">{{ error }}</div> {% endif %}
+                    <form action="{{ path('register') }}" method="post">
+                        <div class="group">
+                            <input id="user_username" name="username" type="text" required="required">
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="material">Nom d'utilisateur</label>
+                        </div>
+                        <div class="group">
+                            <input id="user_email" name="email" type="email" required="required">
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="material">Email</label>
+                        </div>
+                        <div class="group">
+                            <input id="user_plainPassword_first" name="plainPassword" type="password" required="required">
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="material">Mot de passe</label>
+                        </div>
+                        <div class="group">
+                            <input id="user_plainPassword_second" name="plainPassword" type="password" required="required">
+                            <span class="highlight"></span>
+                            <span class="bar"></span>
+                            <label class="material">Répéter le mot de passe</label>
+                        </div>
+                        <div class="buttons">
+                            <button type="submit" class="btn btn-success btn-medium"><i class="fa fa-check">&nbsp;&nbsp;</i>S'inscrire</button>
+                        </div>
+                    </form>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+{% endembed %}

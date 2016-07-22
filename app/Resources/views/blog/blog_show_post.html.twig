@@ -1,0 +1,121 @@
+{% embed 'base.html.twig' with {'title': post.title, 'isFullscreen': '0', 'subtitle': post.subtitle, 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                    <div class="category">
+                        <i class="fa fa-tag">&nbsp;&nbsp;</i>{{ post.category.name }}
+                    </div>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+
+                        {{ post.content }}
+                    {% endautoescape %}
+
+
+                    <hr/>
+                    <div class="post-metadata">
+                        <div class="month">
+                            <i class="fa fa-calendar">&nbsp;&nbsp;</i>{{ post.createdAt|date('d/m/Y') }}
+                        </div>
+                        <div class="hour">
+                            <i class="fa fa-clock-o">&nbsp;&nbsp;</i>{{ post.createdAt|date('H:i') }}
+                        </div>
+                        <div class="author">
+                            <i class="fa fa-user">&nbsp;&nbsp;</i>{{ post.author.username }}
+                        </div>
+                    </div>
+
+                    {% if is_granted('ROLE_ADMIN') or (is_granted('ROLE_WRITER') and post.author.username == app.user.username) %}
+                        <hr>
+                        {% if post.createdAt != post.editedAt %}
+                            <div class="last-edited">
+                                Date de dernière modification : {{ post.editedAt|date('d/m/Y H:i:s') }}
+                            </div>
+                        {% endif %}
+                        <a class="align-right btn btn-info btn-medium" href="{{ path('blog_edit_post', {"id": post.id}) }}"><i class="fa fa-edit">&nbsp;&nbsp;</i>Éditer l'article</a>
+                    {% endif %}
+
+                    <hr>
+
+                    {% if app.user %}
+
+                        <form action="{{ path('blog_add_comment_to_post', { 'day': post.createdAt|date('d'), 'month': post.createdAt|date('m'), 'year': post.createdAt|date('Y'), 'slug': post.slug}) }}" method="post">
+                            <div class="group">
+                                <textarea name="commentContent" id="commentContent" cols="120" rows="1" required="required"></textarea>
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                <label class="material">Entrez votre commentaire</label>
+                            </div>
+                            <div class="buttons">
+                                <button class="btn btn-success btn-medium" type="submit">Poster le commentaire</button>
+                            </div>
+                        </form>
+                    {% endif %}
+
+                    {% if post.comments|length == 0 %}
+                        <h3>Aucun commentaire</h3>
+                    {% else %}
+                        <h3>Commentaire{% if post.comments|length > 1 %}s{% endif %} ({{ post.comments|length }})</h3>
+                    {% endif %}
+                        <ul class="comments">
+                            {% for comment in post.comments|reverse %}
+                                <li class="comment">
+                                        <div class="comment-author">{{ comment.author.username }}</div>
+                                        <div class="comment-content">{{ comment.content }}</div>
+                                        {% if is_granted('ROLE_MOD') or comment.author.username == app.user.username|default('') %}
+                                        <form class="form-comment" action="{{ path('blog_delete_comment_from_post', {
+                                            'day': post.createdAt|date('d'), 'month': post.createdAt|date('m'), 'year': post.createdAt|date('Y'), 'slug': post.slug, 'id': comment.id}) }}" method="post">
+                                                <button class="btn btn-danger" style="width: 250px; margin-top: 20px" type="submit"><i class="fa fa-close">&nbsp;&nbsp;</i>Supprimer le commentaire</button>
+                                        </form>
+                                        {% endif %}
+                                        <div class="comment-date">{{ comment.createdAt|date('d/m/Y ') }}<span class="hour"> | {{ comment.createdAt|date('H:i') }}</span></div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+    {% block customcss %}
+        {% if post.thumbnailUrl != null and post.thumbnailUrl|preg_match('/\.(jpg|png|gif|jpeg|svg)$/i') %}
+            <style>
+                .generic-card header{
+                    background: url("{{ post.thumbnailUrl }}"), center;
+                    background-size: cover;
+                }
+            </style>
+        {% elseif randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+    {% endblock %}
+
+
+{% endembed %}

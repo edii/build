@@ -1,0 +1,50 @@
+{% embed 'base.html.twig' with {'title': 'Portfolio', 'subtitle': "Mon portfolio", 'isFullscreen': '1', 'randomHeaderColors': '1', 'projectsPerRow': 2} %}
+
+
+    {% block body %}
+
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+
+
+                    {% for project in projects %}
+                        {% if loop.index0 % projectsPerRow == 0 %}<div class="row">{% endif %}
+                            {% embed 'templates/portfolio/project_item.html.twig' with {'project': project} %}{% endembed %}
+                        {% if loop.index % projectsPerRow == 0 %}</div>{% endif %}
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+        <style>
+            {% if randomHeaderColors %}
+            .generic-card header {
+                background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+            }
+
+            {% endif %}
+        </style>
+    {% endblock %}
+
+{% endembed %}

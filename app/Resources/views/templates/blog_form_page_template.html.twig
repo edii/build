@@ -1,0 +1,28 @@
+<div class="group">
+    <input name="pageTitle" type="text" required {% if editMode %}value="{{ page.name }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Nom de la page</label>
+</div>
+<div class="group">
+    <input name="pageSubtitle" type="text" required {% if editMode %} value="{{ page.subtitle }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Sous titre de la page</label>
+</div>
+
+<div class="group">
+    <label class="no-material" for="fullscreen" style="display: inline-block; width: 90px; height: 60px;">Plein écran</label>
+    <input name="fullscreen" style="display: inline-block; width: 5px;" type="checkbox" {% if editMode and page.isFullscreen %} checked {% endif %} value="1">
+</div>
+
+
+<div class="pageContent" style="position: relative; top: -87px;">
+    <label class="no-material" for="pageContent">Contenu de la page</label>
+    <textarea name="pageContent" id="pageContent" cols="30" rows="10"></textarea>
+</div>
+
+<div class="buttons">
+    <button class="btn btn-info btn-medium" type="submit"><i class="fa fa-edit">&nbsp;&nbsp;</i>{% if editMode %} Modifier {% else %} Ajouter la page {% endif %}</button>
+    {% if editMode %}<a class="btn btn-danger btn-medium" href="{{ path('page_delete', {"id": page.id}) }}"><i class="fa fa-times">&nbsp;&nbsp;</i>Supprimer la page</a>{% endif %}
+</div>

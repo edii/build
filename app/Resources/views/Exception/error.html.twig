@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container fullscreen">
+
+        <div class="generic-card fullscreen">
+            <header>
+                <h2>Erreur 404</h2>
+                <p class="subtitle">Je crois que tu t'es perdu fdp</p>
+            </header>
+            <div class="content fullscreen">
+
+                Tu t'es perdu putain un vrai bon à rien. Retourne <a href="{{ path('homepage') }}">à l'accueil du site</a>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <style>
+        .generic-card header {
+            background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, #8b5141 20%, #772812 80%) center, center, center;
+        }
+    </style>
+{% endblock %}

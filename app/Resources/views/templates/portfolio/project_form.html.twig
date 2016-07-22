@@ -1,0 +1,96 @@
+<div class="group" style="width: 35%;">
+    <input name="projectName" type="text" required {% if editMode %}value="{{ project.name }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Nom du projet</label>
+</div>
+<div class="group" style="width: 60%;">
+    <input name="projectDescription" type="text"
+           required {% if editMode %} value="{{ project.description }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Description du projet</label>
+</div>
+<div class="group" style=" width: 100%;">
+    <input name="projectThumbnail" type="text" {% if editMode %} value="{{ project.imageUrl }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Image à la une</label>
+</div>
+<div class="group" style=" width: 100%;">
+    <input name="projectLanguages" type="text" {% if editMode %} value="{{ project.languages|join(', ') }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Langages utilisés (séparer chaque langage par une virgule)</label>
+</div>
+<h3>Option du slider</h3>
+<hr>
+<div class="slider-options">
+    <a id="btnAddImage" href="" class="btn btn-medium btn-info" style="display: block;"><i class="fa fa-plus">&nbsp;&nbsp;</i>Ajouter une image</a>
+    {% if editMode and project.imagesObject is not empty %}
+        {% for projectImage in project.imagesObject %}
+            <div id="projectImage" class="group" style=" width: 46%; margin-right: 3%;">
+                <input name="imageUrls[]" type="text" required value="{{ projectImage.url }}">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="material">URL de l'image</label>
+            </div>
+            <div id="projectImageDescription" class="group" style=" width: 41%; margin-right: 31px;">
+                <input name="imageDescriptions[]" type="text" value="{{ projectImage.description }}">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="material">Description de l'image</label></div>
+                <a id="btnDelImage" href="" class="btn btn-small btn-danger" style="position: relative; left:30px; width: 40px; height: 40px; top:-87px; line-height:25px;"><i class="fa fa-times"></i></a>
+
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+<hr>
+
+<div class="group">
+    <label class="no-material" for="fullscreen"
+           style="display: inline-block; width: 90px; height: 60px;">Catégories</label>
+    {% for category in categories %}
+        <span style="margin: 0 20px;">{{ category.name }}</span><input name="categories[]"
+                                                                       style="display: inline-block; width: 5px;"
+                                                                       type="checkbox"
+            {% if editMode %}
+                {% for projectCategory in project.categories %}
+                    {% if category.id == projectCategory.id %} checked {% endif %}
+                {% endfor %}
+            {% endif %} value="{{ category.id }}">
+    {% endfor %}
+</div>
+
+<div class="group">
+    <label class="no-material" for="fullscreen"
+           style="display: inline-block; width: 90px; height: 60px;">Plateformes</label>
+    {% for platform in platforms %}
+        <span style="margin: 0 20px;"><i class="fa fa-{{ platform.slug }}">&nbsp;&nbsp;</i>{{ platform.name }}</span><input name="platforms[]"
+                                                                       style="display: inline-block; width: 5px;"
+                                                                       type="checkbox"
+            {% if editMode %}
+                {% for projectPlatform in project.platforms %}
+                    {% if platform.id == projectPlatform.id %} checked {% endif %}
+                {% endfor %}
+            {% endif %} value="{{ platform.id }}">
+    {% endfor %}
+</div>
+
+
+
+<div class="projectContent" style="position: relative; top: -87px;">
+    <label class="no-material" for="projectContent">Contenu du projet</label>
+    <textarea name="projectContent" id="projectContent" cols="30" rows="10"></textarea>
+</div>
+
+<div class="buttons">
+    <button class="btn btn-info btn-medium" type="submit"><i class="fa fa-edit">
+            &nbsp;&nbsp;</i>{% if editMode %} Modifier {% else %} Ajouter le projet {% endif %}</button>
+    {#{% if editMode %}<a class="btn btn-danger btn-medium" href="{{ path('project_delete', {"id": project.id}) }}"><i class="fa fa-times">&nbsp;&nbsp;</i>Supprimer la project</a>{% endif %}#}
+</div>
+
+
+

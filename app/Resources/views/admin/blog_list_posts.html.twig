@@ -1,0 +1,77 @@
+{% embed 'base.html.twig' with {'title': 'Articles', 'subtitle': "Liste des articles", 'isFullscreen': '1', 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <p>Index des articles disponibles</p>
+                    
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Auteur</th>
+                            <th>Catégorie</th>
+                            <th>Date de création</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for post in posts %}
+                            <tr>
+                                <td><a href="{{ path('blog_show_post', {
+                                        'day': post.createdAt|date('d'),
+                                        'month': post.createdAt|date('m'),
+                                        'year': post.createdAt|date('Y'),
+                                        'slug': post.slug}) }}">{{ post.title }}</a> <span class="post-description">{{ post.subtitle }}</span></td>
+                                <td>{{ post.author.username }}</td>
+                                <td>{{ post.category.name }}</td>
+                                <td>{{ post.createdAt|date('d/m/Y') }} <span style="color: rgba(255,255,255,0.5);">{{ post.createdAt|date('H:i') }}</span></td>
+                                <td class="actions"><a class ="btn btn-info" href="{{ path('blog_edit_post', {'id': post.id }) }}"><i class="fa fa-edit">&nbsp;&nbsp;</i>Éditer</a><a class="btn btn-danger" href="{{ path('blog_post_delete', {"id": post.id}) }}"><i class="fa fa-times">&nbsp;&nbsp;</i>Supprimer</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <hr>
+                    <a class="btn btn-success btn-medium align-right" href="{{ path('blog_add_post') }}"><i class="fa fa-plus"></i>&nbsp;&nbsp;Ajouter un post</a>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+
+{% endembed %}

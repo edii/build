@@ -1,0 +1,107 @@
+{% embed 'base.html.twig' with {'title': project.name, 'isFullscreen': '1'} %}
+
+    {% block stylesheets %}
+        <link href="{{ asset('style/jquery.bxslider.css') }}" rel="stylesheet" />
+    {% endblock %}
+
+    {% block body %}
+
+        <!--suppress ALL -->
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2 class="project-name">{{ title }}</h2>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %} portfolio">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+
+
+
+                    {% endautoescape %}
+
+                    {% if project.imagesObject is not empty %}
+                        <div class="project-slider">
+                            <ul class="bxslider">
+                                {% for image in project.imagesObject %}
+                                    <li><img src="{{ image.url }}" title="{{ image.description }}"/></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <div class="project-content">
+                        {{ project.content|raw }}
+                    </div>
+
+                    {% if project.categories is not empty or project.platforms is not empty or project.languages is not empty%}
+                    <div class="project-informations">
+                        {% if project.platforms is not empty %}
+                            <h3>Plateformes disponibles</h3>
+                            <ul class="platforms">
+                                {% for platform in project.platforms %}
+                                    <li><i class="fa fa-{{ platform.slug }}">&nbsp;&nbsp;</i>{{ platform.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if project.languages is not empty %}
+                            <h3>Langages utilisés</h3>
+                            <ul class="languages">
+                                {{ project.languages|join(", ") }}
+                            </ul>
+                        {% endif %}
+                        {% if project.categories is not empty %}
+                            <h3>Catégorie{% if project.categories|length > 1 %}s{% endif %}</h3>
+                            <p><i class="fa fa-tags">&nbsp;&nbsp;</i>
+                                {% for category in project.categories %}{{ category.name }}{% if not loop.last %},&nbsp;{% endif %}{% endfor %}
+                            </p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+
+
+                    {% if app.user and is_granted('ROLE_ADMIN') %}
+
+                        <hr>
+                        <a class="align-right btn btn-info btn-medium" href="{{ path('project_edit', {"id": project.id}) }}"><i class="fa fa-edit">&nbsp;&nbsp;</i>Éditer le projet</a>
+
+
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+        <style>
+            .generic-card header {
+                background: url("{{ project.imageUrl|default('http://www.fullwidehd.com/wp-content/uploads/2015/10/abstract-wallpaper-cool-high-definition.jpg') }}") center center;
+                background-size: cover;
+            }
+        </style>
+    {% endblock %}
+
+    {% block javascripts %}
+        <script src="{{ asset('js/jquery.bxslider.js') }}"></script>
+        <script>
+            $(document).ready(function(){
+                $('.bxslider').bxSlider({
+                    adaptiveHeight: true,
+                    captions: true
+                });
+            });
+        </script>
+    {% endblock %}
+
+{% endembed %}

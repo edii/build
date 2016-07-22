@@ -1,11 +1,15 @@
-build_main:
-    resource: "@AppBundle/Controller/IndexController.php"
-    type: annotation
-    prefix: /
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
 
-build_backend:
-    resource: routing_backend.yml
-    prefix: /admin
+#build_main:
+#    resource: "@AppBundle/Controller/IndexController.php"
+#    type: annotation
+#    prefix: /
+#
+#build_backend:
+#    resource: routing_backend.yml
+#    prefix: /admin
 
 user:
     resource: "@UserBundle/Resources/config/routing.yml"

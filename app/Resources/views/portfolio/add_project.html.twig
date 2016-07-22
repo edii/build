@@ -1,0 +1,99 @@
+{% embed 'base.html.twig' with {'title': 'Ajouter un projet', 'subtitle': '', 'isFullscreen': '1', 'randomHeaderColors': '1'} %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    {% endblock %}
+
+    {% block body %}
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <form action="{{ path('project_add') }}" method="post">
+                        {% embed 'templates/portfolio/project_form.html.twig' with {'editMode': false} %}
+                        {% endembed %}
+                    </form>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+        <style>
+            .editor-toolbar{
+                background: #fff;
+                opacity: 0.9;
+            }
+            {% if randomHeaderColors %}
+            .generic-card header {
+                background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+            }
+            {% endif %}
+        </style>
+    {% endblock %}
+
+    {% block javascripts %}
+        <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+        <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        <script>
+            var simplemde = new SimpleMDE({ element: $("#projectContent")[0],
+                spellChecker: false,
+                promptURLs: true,
+                renderingConfig: {
+                    codeSyntaxHighlighting: true
+                }
+            });
+
+        </script>
+        <script>
+
+            var main = function(){
+                $(document).on('click', '#btnAddImage',function(e) {
+                    e.preventDefault();
+                    var sliderItem = '<div id="projectImage" class="group" style=" width: 46%; margin-right: 3%;"> ' +
+                            '<input name="imageUrls[]" type="text" required>' +
+                            '<span class="highlight"></span>' +
+                            '<span class="bar"></span>' +
+                            '<label class="material">URL de l\'image</label></div>' +
+                            '<div id="projectImageDescription" class="group" style=" width: 41%; margin-right: 31px;"> ' +
+                            '<input name="imageDescriptions[]" type="text">' +
+                            '<span class="highlight"></span>' +
+                            '<span class="bar"></span>' +
+                            '<label class="material">Description de l\'image</label></div>' +
+                            '<a id="btnDelImage" href="" class="btn btn-small btn-danger" style="position: relative; left:30px; width: 40px; height: 40px; top:-87px; line-height:25px;"><i class="fa fa-times"></i></a>';
+                    $('.slider-options').append($(sliderItem));
+                });
+
+                $(document).on('click', '#btnDelImage', function(e) {
+                    e.preventDefault();
+                    $(this).prev('#projectImageDescription').remove();
+                    $(this).prev('#projectImage').remove();
+                    $(this).remove();
+                })
+
+
+            };
+
+            $(document).ready(main);
+        </script>
+
+    {% endblock %}
+
+{% endembed %}

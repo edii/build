@@ -1,0 +1,35 @@
+<div class="group" style="width: 35%;">
+    <input name="postTitle" type="text" required {% if editMode %}value="{{ post.title }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Titre de l'article</label>
+</div>
+<div class="group" style="width: 60%;">
+    <input name="postSubtitle" type="text" required {% if editMode %} value="{{ post.subtitle }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Sous titre de l'article</label>
+</div>
+<div class="group" style=" width: 66%; margin-right: 5%;">
+    <input name="postThumbnail" type="text" {% if editMode %} value="{{ post.thumbnailUrl }}" {% endif %}>
+    <span class="highlight"></span>
+    <span class="bar"></span>
+    <label class="material">Image à la une</label>
+</div>
+<div class="group" style="width: 28%; top: -82px;">
+    <label class="no-material" for="postCategory">Catégorie</label>
+    <select name="postCategory" id="postCategory">
+        {% for category in categories %}
+            <option value="{{ category.id }}" {% if editMode and category.id == post.category.id %} selected="selected" {% endif %}>{{ category.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="postContent" style="position: relative; top: -87px;">
+    <label class="no-material" for="postContent">Contenu du message</label>
+    <textarea name="postContent" id="postContent" cols="30" rows="10"></textarea>
+</div>
+
+<div class="buttons">
+    <button class="btn btn-info btn-medium" type="submit"><i class="fa fa-edit">&nbsp;&nbsp;</i>{% if editMode %} Modifier {% else %} Ajouter le post {% endif %}</button>
+    {% if editMode %}<a class="btn btn-danger btn-medium" href="{{ path('blog_post_delete', {"id": post.id}) }}"><i class="fa fa-times">&nbsp;&nbsp;</i>Supprimer l'article</a>{% endif %}
+</div>

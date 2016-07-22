@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+
+        <section class="greetings">
+            <header>
+                <h2>Bienvenue sur mon site web</h2>
+                <p class="subtitle">Réalisé par JBARA Omar</p>
+            </header>
+            {#<footer>#}
+                {#{{ render(controller('AppBundle:Default:dislayMenu', {'classNames' : 'actions'})) }}#}
+            {#</footer>#}
+        </section>
+
+        <section class="features">
+            <header>
+                <h2>Features</h2>
+                <p>Sous titre</p>
+            </header>
+            <div class="content">
+                <div class="feature">
+                    <div class="icon-container"><i class="fa fa-2x fa-television"></i></div>
+                    <h3>Je suis une feature</h3>
+                    <p>Praesent egestas quam at lorem imperdiet lobortis. Mauris condimentum et euismod ipsum, at
+                        ullamcorper libero dolor auctor sit amet. Proin vulputate amet sem ut tempus. Donec quis ante
+                        viverra, suscipit euismod habitant lorem ipsum dolo lorem ipsum dolor</p>
+                </div>
+                <div class="feature">
+                    <div class="icon-container"><i class="fa fa-2x fa-gamepad"></i></div>
+                    <h3>Je suis une feature</h3>
+                    <p>Praesent egestas quam at lorem imperdiet lobortis. Mauris condimentum et euismod ipsum, at
+                        ullamcorper libero dolor auctor sit amet. Proin vulputate amet sem ut tempus. Donec quis ante
+                        viverra, suscipit euismod habitant lorem ipsum dolor lorem ipsum dolor</p>
+                </div>
+                <div class="feature">
+                    <div class="icon-container"><i class="fa fa-2x fa-save"></i></div>
+                    <h3>Je suis une feature</h3>
+                    <p>Praesent egestas quam at lorem imperdiet lobortis. Mauris condimentum et euismod ipsum, at
+                        ullamcorper libero dolor auctor sit amet. Proin vulputate amet sem ut tempus. Donec quis ante
+                        viverra, suscipit euismod habitant lorem ipsum dolor lorem ipsum dolor</p>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+

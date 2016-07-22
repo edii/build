@@ -1,0 +1,72 @@
+{% embed 'base.html.twig' with {'title': 'Blog', 'isFullscreen': '1', 'subtitle': "Derniers articles", 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                        {% if is_granted('ROLE_WRITER') %}
+                            <a href="{{ path('blog_add_post') }}" class="btn btn-success btn-medium"><i class="fa fa-plus"></i>&nbsp;&nbsp;Ajouter un article</a><hr>{% endif %}
+                        {% for post in posts %}
+                            <h2><a href="{{ path('blog_show_post', {
+                                    'day': post.createdAt|date('d'),
+                                    'month': post.createdAt|date('m'),
+                                    'year': post.createdAt|date('Y'),
+                                    'slug': post.slug}) }}">{{ post.title }}</a></h2>
+                            <h3>{{ post.subtitle }}</h3>
+                            {% if post.content|length > 2000 %}
+                                <div class="post-content">
+                                    {{ post.content }}
+                                </div>
+                                <a style="margin-top: 40px;" href="{{ path('blog_show_post', {
+                                    'day': post.createdAt|date('d'),
+                                    'month': post.createdAt|date('m'),
+                                    'year': post.createdAt|date('Y'),
+                                    'slug': post.slug}) }}">En savoir plus...</a>
+                            {% else %}
+                                {{ post.content }}
+                            {% endif %}
+                            <p>{{ post.category.name }}</p>
+                            <p>le {{ post.createdAt|date('d/m/Y, à H:i') }}</p>
+                            <hr>
+
+                        {% endfor %}
+
+                    {% endautoescape %}
+                </div>
+
+
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+
+{% endembed %}

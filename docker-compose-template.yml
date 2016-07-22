@@ -2,7 +2,7 @@ version: '2'
 services:
   web:
     build:
-      context: ./docker/vendor/docker/src/
+      context: ./docker/build/src/
       dockerfile: Dockerfile.yml
       args:
         - php=56 # (54|55|56|70)

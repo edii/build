@@ -1,5 +1,64 @@
-{% extends '::admin.html.twig' %}
+{% embed 'base.html.twig' with {'title': 'Admin', 'isFullscreen': '1', 'subtitle': "Espace d'administration", "randomHeaderColors": '1', 'randomHeaderColors': '1'} %}
 
-{% block body %}
-    <h1>New Project Created ADMIN</h1>
-{% endblock %}
+
+    {% block body %}
+
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content content-row {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+
+                    <div class="pages">
+                        <h3>Gérer les pages</h3>
+                        <a href="{{ path('page_list') }}" class="btn btn-info btn-medium">Gérer les pages</a>
+                    </div>
+                    <div class="posts">
+                        <h3>Gérer les articles</h3>
+                        <a href="{{ path('blog_list_posts') }}" class="btn btn-info btn-medium">Gérer les articles</a>
+                    </div>
+                    <div class="users">
+                        <h3>Gérer les utilisateurs</h3>
+                        <a href="{{ path('user_list') }}" class="btn btn-info btn-medium">Gérer les utilisateurs</a>
+
+                    </div>
+
+                    <div class="projects">
+                        <h3>Gérer le portfolio</h3>
+                        <a href="{{ path('portfolio_list_projects') }}" class="btn btn-info btn-medium">Gérer le portfolio</a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+{% endembed %}

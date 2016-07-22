@@ -89,11 +89,10 @@ if [ $COMPOSER_IS_INSTALLED -ne 0 ]; then
     logger "Pleas install composer."
     exit 1
 fi
-composer install
 
 # RUN docker
 cd ../
-if [ ! -f "docker/vendor/docker/src/Dockerfile.yml" ]; then
+if [ ! -f "docker/build/src/Dockerfile.yml" ]; then
     logger "Canot install Dockerfile.yml"
     exit 1
 else

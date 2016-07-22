@@ -1,0 +1,11 @@
+<div class="portfolio-item">
+    <div class="item-thumbnail">
+        <div class="item-categories">{% for category in project.categories %}<a href="">{{ category.name }}</a>{% if not loop.last %},&nbsp;{% endif %}{% endfor %}</div>
+        <div class="item-title"><h2><a href="{{ path('project_detail', {"slug": project.slug}) }}">{{ project.name }}</a></h2></div>
+        <img src="{{ project.imageUrl|default('http://img14.deviantart.net/95e7/i/2014/007/d/3/google_abstract_by_dynamicz34-d718hzj.png') }}"
+             alt="">
+        <div class="img-overlay"></div>
+        {% if project.platforms is not empty %}<div class="item-platforms">{% for platform in project.platforms %}<i title="{{ platform.name }}" class="fa fa-{{ platform.slug }}">&nbsp;&nbsp;</i>{% endfor %}</div>{% endif %}
+    </div>
+    <div class="item-description">{{ project.description }}</div>
+</div>

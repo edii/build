@@ -1,0 +1,48 @@
+{% embed 'base.html.twig' with {'title': page.name, 'subtitle': page.subtitle, 'isFullscreen': page.isFullscreen} %}
+
+
+{% block body %}
+
+    <div class="container {% if page.isFullscreen|default(false) %} fullscreen {% endif %}">
+
+        <div class="generic-card {% if page.isFullscreen %} fullscreen {% endif %}">
+            <header>
+                <h2>{{ page.name }}</h2>
+                <p class="subtitle">{{ page.subtitle }}</p>
+            </header>
+            <div class="content {% if page.isFullscreen %} fullscreen {% endif %}">
+                {% autoescape false %}
+                    {% for message_danger in app.session.flashBag.get('danger') %}
+                        <div class="alert alert-danger">{{ message_danger }}</div>
+                    {% endfor %}
+                    {% for message_success in app.session.flashBag.get('success') %}
+                        <div class="alert alert-success">{{ message_success }}</div>
+                    {% endfor %}
+                    {{ page.content }}
+                {% endautoescape %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <hr>
+
+                <a class="align-right btn btn-info btn-medium" href="{{ path('page_edit', {'id' : page.id}) }}"><i class="fa fa-edit">&nbsp;&nbsp;</i>Éditer la page</a>
+
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block customcss %}
+
+    {% if page.randomHeaderColors %}
+        <style>
+            .generic-card header {
+                background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+            }
+
+        </style>
+    {% endif %}
+
+{% endblock %}
+
+{% endembed %}

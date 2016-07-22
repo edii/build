@@ -1,0 +1,71 @@
+{% embed 'base.html.twig' with {'title': 'Portfolio', 'subtitle': "Liste des projets", 'isFullscreen': '1', 'randomHeaderColors': '1'} %}
+
+
+    {% block body %}
+        <div class="container {% if isFullscreen %} fullscreen {% endif %}">
+
+            <div class="generic-card {% if isFullscreen %} fullscreen {% endif %}">
+                <header>
+                    <h2>{{ title }}</h2>
+                    <p class="subtitle">{{ subtitle }}</p>
+                </header>
+                <div class="content {% if isFullscreen %} fullscreen {% endif %}">
+                    {% autoescape false %}
+                        {% for message_danger in app.session.flashBag.get('danger') %}
+                            <div class="alert alert-danger">{{ message_danger }}</div>
+                        {% endfor %}
+                        {% for message_success in app.session.flashBag.get('success') %}
+                            <div class="alert alert-success">{{ message_success }}</div>
+                        {% endfor %}
+                    {% endautoescape %}
+                    <p>Index des projets disponibles</p>
+                    
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Catégories</th>
+                            <th>Date de création</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for project in projects %}
+                            <tr>
+                                <td><a href="{{ path('project_detail', {'slug': project.slug}) }}">{{ project.name }}</a> <span class="project-description">{{ project.description }}</span></td>
+                                <td>{% for category in project.categories %}{{ category.name }}{% if not loop.last %},&nbsp;{% endif %}{% endfor %}</td>
+                                <td>{{ project.createdAt|date('d/m/Y') }} <span style="color: rgba(255,255,255,0.5);">{{ project.createdAt|date('H:i') }}</span></td>
+                                <td class="actions"><a class ="btn btn-info" href="{{ path('project_edit', {'id': project.id }) }}"><i class="fa fa-edit">&nbsp;&nbsp;</i>Éditer</a><a class="btn btn-danger" href="{{ path('project_delete', {"id": project.id}) }}"><i class="fa fa-times">&nbsp;&nbsp;</i>Supprimer</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <hr>
+                    <a class="btn btn-success btn-medium align-right" href="{{ path('project_add') }}"><i class="fa fa-plus"></i>&nbsp;&nbsp;Ajouter un projet</a>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block customcss %}
+
+        {% if randomHeaderColors %}
+            <style>
+                .generic-card header {
+                    background: url("{{ asset('img/overlay.png') }}"), url("{{ asset('img/svg/header-bg.svg') }}"), linear-gradient(45deg, {{ generateColor() }} 20%, {{ generateColor() }} 80%) center, center, center;
+                }
+
+            </style>
+        {% endif %}
+
+    {% endblock %}
+
+
+{% endembed %}
