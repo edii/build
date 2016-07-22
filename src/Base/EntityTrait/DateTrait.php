@@ -60,8 +60,6 @@ trait DateTrait
     }
 
     /**
-     * Set updatedAt and createdAt to current if value not specified time on prePersist event
-     *
      * @ORM\PrePersist
      */
     public function preCreateChangeDate()
@@ -71,8 +69,6 @@ trait DateTrait
     }
 
     /**
-     * Set updatedAt to current time on preUpdate event
-     *
      * @ORM\PreUpdate
      */
     public function preUpdateChangeDate()

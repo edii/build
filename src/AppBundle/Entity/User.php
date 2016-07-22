@@ -2,20 +2,29 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Base\EntityTrait\DateTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *     fields="email",
+ *     message="email.already_used"
+ * )
  */
 class User implements UserInterface, \Serializable
 {
+    use DateTrait;
+
     /**
      * @var int
      *
@@ -39,17 +48,11 @@ class User implements UserInterface, \Serializable
     private $plainPassword;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=60)
      */
     private $password;
-
 
     /**
      * @var string
@@ -255,8 +258,7 @@ class User implements UserInterface, \Serializable
      */
     public function __construct()
     {
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -300,29 +302,12 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
      * @return Post[]
      */
     public function getPosts()
     {
         return $this->posts;
     }
-
 
     /**
      * Add post
