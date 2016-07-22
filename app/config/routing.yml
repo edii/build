@@ -11,5 +11,5 @@ app:
 #    resource: routing_backend.yml
 #    prefix: /admin
 
-user:
-    resource: "@UserBundle/Resources/config/routing.yml"
+#user:
+#    resource: "@UserBundle/Resources/config/routing.yml"
